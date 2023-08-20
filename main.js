@@ -163,6 +163,7 @@ function realizarReserva() {
     let found;
     let diaSeleccionado;
     let diaSeleccionadoX;
+    let tipoFound = "";
 
     // Seleccionar deporte y obtener precio regular
 
@@ -194,20 +195,19 @@ function realizarReserva() {
     );
 
     do {
-        diaSeleccionado = hacerPregunta(`Indica el día seleccionado:\n${cadenaDias}`);
+        do {
+            diaSeleccionado = hacerPregunta(`Indica el día seleccionado:\n${cadenaDias}`);
 
-        found = dias.find(e => e.nombre === diaSeleccionado);
-        if (diaSeleccionado[1] == true) {
+        } while (diaSeleccionado[1] == false);
 
-        } else if (typeof found == "undefined" || found.activado == false || datoIncremento[1] == false) {
-            alert("Por favor, indique el día correcto.");
+        found = dias.find(e => e.nombre === diaSeleccionado[0]);
+        tipoFound = typeof found;
+        if (tipoFound == "undefined") {
+            alert("Por favor, selecciona únicamente alguno de los días que indicamos.")
         }
-        datoIncremento = incrementoDia(diaSeleccionadoX);
-
-    } while (typeof found == "undefined" || found.activado == false || datoIncremento[1] == false);
-
-
-
+    } while (tipoFound === "undefined" || found.activado === false);
+    diaSeleccionadoX = diaSeleccionado[0];
+    datoIncremento = incrementoDia(diaSeleccionadoX);
 
 
     //Seleccionar horario
@@ -218,6 +218,13 @@ function realizarReserva() {
         respuestaLuces = incrementoLuces(horaReserva);
 
     } while (respuestaLuces[1] == false);
+    alert(`${datosCliente[2]}`)
+    alert(`${deporteReserva}`)
+    alert(`${diaReserva}`)
+    alert(`${horaReserva}`)
+    alert(`${respuestaPrecio[0]}`)
+    alert(`${respuestaLuces[0]}`)
+    alert(`${incrementoDia(diaReserva)}`)
 
     const nuevaReserva = new reserva(datosCliente[2], deporteReserva, diaReserva, horaReserva, respuestaPrecio[0], respuestaLuces[0], incrementoDia(diaReserva))
     reservas.push(nuevaReserva);
@@ -231,7 +238,7 @@ function realizarReserva() {
     let mensajeReservaFinal = "";
     reservas.forEach(item => {
         mensajeReservaFinal = mensajeReservaFinal + `
-         <div class="card_reserva">
+    < div class= "card_reserva" >
         <p>DNI:  ${item.dni}</p>
         <p>Nombre:</p>
         <p>Deporte: ${item.deporte}</p>
@@ -239,7 +246,7 @@ function realizarReserva() {
         <p>Precio regular: S/.${item.precioRegular}</p>
         <p>Incremento: ${(item.incrementoXLuces + item.incrementoXFDS) * 100}%</p>
         <p>Precio final: S/.${(item.precioRegular * (1 + (item.incrementoXLuces + item.incrementoXFDS)))}</p>
-    </div>`
+    </ > `
 
     });
     contenedorCardsReservas.innerHTML = mensajeReservaFinal;
@@ -294,7 +301,7 @@ function registrarCliente() {
         mensaje = "";
         contenedorClientes.innerHTML = "";
         clientes.forEach(item => {
-            mensaje = mensaje + `<li>${item.nombre} ${item.apellido} (${item.dni})</li>`;
+            mensaje = mensaje + `<li> ${item.nombre} ${item.apellido}(${item.dni})</li> `;
             contenedorClientes.innerHTML = mensaje;
         })
     } else {
@@ -326,7 +333,7 @@ function cargarDias() {
     dias.forEach(item => {
         if (item.activado == true) {
             let div = document.createElement("div");
-            div.innerHTML = `<li>${item.nombre}</li>`;
+            div.innerHTML = `<li> ${item.nombre}</li> `;
             contenedorDias.append(div);
         }
     })
@@ -356,6 +363,7 @@ function cargarDeportes() {
 
 
 //Función Deshabilitar días
+
 const deshabilitarDia = () => {
     let mensaje = "";
     dias.forEach(item => {
@@ -365,7 +373,7 @@ const deshabilitarDia = () => {
     });
     let diaBloqueado = hacerPregunta(`Indica el día que desea bloquear: ${mensaje} `);
     dias.forEach(item => {
-        if (diaBloqueado === item.nombre || Number(diaBloqueado) === item.id) {
+        if (diaBloqueado[0] === item.nombre || Number(diaBloqueado[0]) === item.id) {
             item.activado = false;
         }
 
@@ -385,7 +393,7 @@ const deshabilitarDeporte = () => {
     });
     let deporteBloqueado = hacerPregunta(`Indica el deporte que desea bloquear: ${mensaje} `);
     deportes.forEach(item => {
-        if (deporteBloqueado === item.nombre || Number(deporteBloqueado) === item.id) {
+        if (deporteBloqueado[0] === item.nombre || Number(deporteBloqueado[0]) === item.id) {
             item.activado = false;
         }
 
