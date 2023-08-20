@@ -1,0 +1,199 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap");
+
+* {
+    margin: 0px;
+    font-family: "Roboto", sans-serif;
+}
+
+h1 {
+
+    color: rgb(1, 110, 56);
+
+}
+
+h3 {
+
+    text-decoration: underline;
+}
+
+hr {
+    padding-top: 30px;
+}
+
+a {
+    text-decoration: none;
+    padding: 10px;
+    background-color: rgb(1, 110, 56);
+    color: white;
+    border-radius: 10px;
+
+
+}
+
+.btnPrincipal {
+    text-decoration: none;
+    font-size: 20px;
+    padding: 10px;
+    background-color: rgb(1, 110, 56);
+    color: white;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+
+}
+
+
+.boton {
+    margin-bottom: 30px;
+}
+
+a:hover {
+    text-decoration: none;
+    padding: 10px;
+    background-color: white;
+    color: rgb(1, 110, 56);
+    border: 1px solid;
+    border-color: rgb(1, 110, 56);
+    border-radius: 10px;
+
+}
+
+ol {
+    padding-top: 20px;
+    padding-bottom: 40px;
+
+}
+
+.contenedorPrincipal {
+
+    width: 100%;
+    height: 100vh;
+    display: flex;
+
+
+}
+
+.contenedorIzquierdo {
+    width: 75%;
+    padding: 20px;
+
+}
+
+
+
+.reservaDeporte {
+
+
+    display: flex;
+}
+
+.contenedorIzquierdoSuperior {
+
+    padding: 20px;
+    display: flex;
+
+    width: 100%;
+
+
+
+}
+
+.contenedorIzquierdoSuperiorIzquierdo {
+
+    padding: 20px;
+    width: 50%;
+
+
+}
+
+.contenedorIzquierdoSuperiorDerecho {
+    padding-top: 100px;
+    padding: 20px;
+    width: 50%;
+    text-align: right;
+
+
+}
+
+.contenedorIzquierdoMedio {
+
+    padding: 20px;
+
+
+}
+
+
+
+.contenedorIzquierdoInferior {
+
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgb(247, 247, 247);
+
+
+}
+
+.contenedorIzquierdoInferior-Flex {
+
+    padding: 20px;
+    display: flex;
+}
+
+.contenedorDerecho {
+    padding: 20px;
+    width: 25%;
+
+    margin: 10px;
+
+    overflow: scroll;
+    border-left: 1px solid #000000;
+
+}
+
+.columna25 {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.columna20 {
+    width: 20%;
+
+    padding: 10px;
+
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+
+
+}
+
+img {
+    width: 80%;
+    align-self: center;
+}
+
+.edit {
+    width: 20px;
+    align-self: center;
+}
+
+editTag {
+    cursor: pointer;
+}
+
+.contenedor_reservas {
+    padding: 20px;
+}
+
+.card_reserva {
+    padding: 10px;
+    border: #000000 solid 1px;
+    border-radius: 10px;
+    background-color: rgb(247, 247, 247);
+    margin-bottom: 10px;
+    margin-top: 5px;
+
+}

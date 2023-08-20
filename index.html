@@ -5,13 +5,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trabajo Final Luis Torres</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-    <h1>
-        Trabajo Final Luis Torres
-    </h1>
 
+
+    <div class="contenedorPrincipal">
+        <div class="contenedorIzquierdo">
+            <div class="contenedorIzquierdoSuperior">
+                <div class="contenedorIzquierdoSuperiorIzquierdo">
+                    <div>
+                        <h1> Reserva de canchas deportivas </h1>
+                        <p>Selecciona el deporte que deseas reservar:</p>
+                    </div>
+
+
+                </div>
+                <div class="contenedorIzquierdoSuperiorDerecho">
+                    <a href="#" class="btnPrincipal" onclick="realizarReserva()">Reserva tu deporte favorito</a>
+                </div>
+            </div>
+            <div class="contenedorIzquierdoMedio">
+                <div id="deportes" class="reservaDeporte">
+
+                </div>
+            </div>
+            <div class="contenedorIzquierdoInferior">
+                </hr>
+                <h2>Configuración de reservas</h2>
+                <div class="contenedorIzquierdoInferior-Flex">
+                    <div class="columna25">
+                        <h3>Días disponibles:</h3>
+                        <ol id="contenedor_dias"></ol>
+                        <div class="boton"><a href="#" onclick="deshabilitarDia()">Deshabilitar algún día</a></div>
+                        <div class="boton"><a href="#" onclick="reestablecerDias()">Restablecer días</a></div>
+                    </div>
+                    <div class="columna25">
+                        <h3>Deportes habilitados</h3>
+                        <ol id="contenedor_deportes"></ol>
+                        <div class="boton"><a href="#" onclick="deshabilitarDeporte()">Deshabilitar algún deporte</a>
+                        </div>
+                        <div class="boton"><a href="#" onclick="reestablecerDeportes()">Restablecer deportes</a></div>
+                    </div>
+                    <div class="columna25">
+                        <h3>Incremento tarifario:</h3>
+                        <table>
+
+                            <tr>
+                                <td>Fin de semana</td>
+                                <td id="incrementoFDS"></td>
+                                <td id="editarFDS">
+                                    <editTag onclick="editarIncrementoFDS()"><img class="edit" src="/images/edit.png">
+                                    </editTag>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Encendido de luces</td>
+                                <td id="incrementoLuces"></td>
+                                <td id="editarLuces">
+                                    <editTag onclick="editarIncrementoLuces()"><img class="edit" src="/images/edit.png">
+                                    </editTag>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="columna25">
+                        <h3>Clientes registrados</h3>
+                        <ol id="contenedor_clientes"></ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="contenedorDerecho">
+            <h2>Reservas realizadas</h2>
+            <div id="contenedor_reservas">
+                <div class="card_reserva">
+                    <p>DNI:</p>
+                    <p>Nombre:</p>
+                    <p>Deporte:</p>
+                    <p>Horario:</p>
+                    <p>Precio regular:</p>
+                    <p>Incremento:</p>
+                    <p>Precio final:</p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
 
 
     <script src="./main.js"></script>
