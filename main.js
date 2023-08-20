@@ -99,13 +99,18 @@ function actualizaDatos() {
 
 // prompt modificar incremento de luces
 let incremento1;
+let incrementoX;
 function editarIncrementoLuces() {
-    incremento1 = Number(hacerPregunta("Indica el valor porcentual de incremento por reservas con luces [no incluir el caracter %].")) / 100;
-    if (isNaN(incremento1)) {
+
+    do {
+        incremento1 = hacerPregunta("Indica el valor porcentual de incremento por reservas con luces [no incluir el caracter %].");
+    } while (incremento1[1] == false);
+    incrementoX = Number(incremento1[0]) / 100;
+    if (isNaN(incrementoX)) {
         alert("Por favor, colocar únicamente un número entero.");
         editarIncrementoLuces();
     } else {
-        incrementos.luces = incremento1;
+        incrementos.luces = incrementoX;
         actualizaDatos();
         alert("Incremento por luces actualizado.");
     }
@@ -114,13 +119,17 @@ function editarIncrementoLuces() {
 
 // prompt modificar incremento de FDS
 let incremento2;
+let incrementoY;
 function editarIncrementoFDS() {
-    incremento2 = Number(hacerPregunta("Indica el valor porcentual de incremento por reservas de fin de semana [no incluir el caracter %].")) / 100;
-    if (isNaN(incremento2)) {
+    do {
+        incremento2 = hacerPregunta("Indica el valor porcentual de incremento por reservas de fin de semana [no incluir el caracter %].");
+    } while (incremento2[1] == false);
+    incrementoY = Number(incremento2[0]) / 100;
+    if (isNaN(incrementoY)) {
         alert("Por favor, colocar únicamente un número entero.");
         editarIncrementoFDS();
     } else {
-        incrementos.fds = incremento2;
+        incrementos.fds = incrementoY;
         actualizaDatos();
         alert("Incremento por fin de semana actualizado.");
     }
@@ -157,13 +166,15 @@ function realizarReserva() {
     let deporteReserva;
     let cadenaDeportes = "";
     let cadenaDias = "";
-    let diaReserva;
     let horaReserva;
     let datoIncremento;
     let found;
+    let horaReservaValor;
+    let mensajeClientes = "";
     let diaSeleccionado;
     let diaSeleccionadoX;
     let tipoFound = "";
+    let foundNombres;
 
     // Seleccionar deporte y obtener precio regular
 
@@ -202,7 +213,7 @@ function realizarReserva() {
 
         found = dias.find(e => e.nombre === diaSeleccionado[0]);
         tipoFound = typeof found;
-        if (tipoFound == "undefined") {
+        if (tipoFound == "undefined" || found.activado === false) {
             alert("Por favor, selecciona únicamente alguno de los días que indicamos.")
         }
     } while (tipoFound === "undefined" || found.activado === false);
@@ -213,20 +224,18 @@ function realizarReserva() {
     //Seleccionar horario
 
     do {
-        horaReserva = hacerPregunta("¿A qué hora desea reservar?\n[6AM] [7AM] [8AM] [9AM] [10AM] [11AM] [12PM] [1PM] [2PM] [3PM] [4PM] [5PM] [6PM] [7PM] [8PM] [9PM] [10PM]");
-        horaReserva = horaReserva.trim();
-        respuestaLuces = incrementoLuces(horaReserva);
-
+        do {
+            horaReserva = hacerPregunta("¿A qué hora desea reservar?\n[6AM] [7AM] [8AM] [9AM] [10AM] [11AM] [12PM] [1PM] [2PM] [3PM] [4PM] [5PM] [6PM] [7PM] [8PM] [9PM] [10PM]");
+            horaReservaValor = horaReserva[0].replace(" ", "");
+        } while (horaReserva[1] == false);
+        respuestaLuces = incrementoLuces(horaReservaValor);
+        if (respuestaLuces[1] == false) {
+            alert("Por favor, selecciona un horario de la lista mostrada.");
+        }
     } while (respuestaLuces[1] == false);
-    alert(`${datosCliente[2]}`)
-    alert(`${deporteReserva}`)
-    alert(`${diaReserva}`)
-    alert(`${horaReserva}`)
-    alert(`${respuestaPrecio[0]}`)
-    alert(`${respuestaLuces[0]}`)
-    alert(`${incrementoDia(diaReserva)}`)
 
-    const nuevaReserva = new reserva(datosCliente[2], deporteReserva, diaReserva, horaReserva, respuestaPrecio[0], respuestaLuces[0], incrementoDia(diaReserva))
+
+    const nuevaReserva = new reserva(datosCliente[2], deporteReserva[0], diaSeleccionadoX, horaReservaValor, respuestaPrecio[0], respuestaLuces[0], datoIncremento[0]);
     reservas.push(nuevaReserva);
 
 
@@ -234,22 +243,31 @@ function realizarReserva() {
 
     //Pintar reservas en sección derecha
 
+    alert(`FDS: ${incrementos.fds} / ${datoIncremento[0]} y Luces ${incrementos.luces} / ${respuestaLuces[0]}`);
     contenedorCardsReservas.innerHTML = "";
     let mensajeReservaFinal = "";
     reservas.forEach(item => {
+        foundNombres = clientes.find(e => e.dni === item.dni);
         mensajeReservaFinal = mensajeReservaFinal + `
-    < div class= "card_reserva" >
+    <div class= "card_reserva">
         <p>DNI:  ${item.dni}</p>
-        <p>Nombre:</p>
+        <p>Nombres: ${foundNombres.nombre} ${foundNombres.apellido}</p>
         <p>Deporte: ${item.deporte}</p>
         <p>Horario: ${item.dia} (${item.hora})</p>
-        <p>Precio regular: S/.${item.precioRegular}</p>
-        <p>Incremento: ${(item.incrementoXLuces + item.incrementoXFDS) * 100}%</p>
-        <p>Precio final: S/.${(item.precioRegular * (1 + (item.incrementoXLuces + item.incrementoXFDS)))}</p>
-    </ > `
+        <p>Precio regular: S/.${parseFloat(item.precioRegular).toFixed(2)}</p>
+        <p>Incremento: ${parseFloat((item.incrementoXLuces + item.incrementoXFDS) * 100).toFixed(2)}%</p>
+        <p>Precio final: S/.${parseFloat(item.precioRegular * (1 + (item.incrementoXLuces + item.incrementoXFDS))).toFixed(2)}</p>
+    </div > `
+
 
     });
     contenedorCardsReservas.innerHTML = mensajeReservaFinal;
+    mensajeClientes = "";
+    contenedorClientes.innerHTML = "";
+    clientes.forEach(item => {
+        mensajeClientes = mensajeClientes + `<li> ${item.nombre} ${item.apellido} (${item.dni})</li> `;
+        contenedorClientes.innerHTML = mensajeClientes;
+    })
 
 }
 
@@ -284,7 +302,7 @@ function registrarCliente() {
         clienteDNI = hacerPregunta("Indica tu DNI: [8 dígitos]");
         clienteDNIX = clienteDNI[0];
     } while (clienteDNI[1] == false);
-    found = clientes.find(e => e.dni === clienteDNI);
+    found = clientes.find(e => e.dni === clienteDNIX);
 
     if (typeof found === "undefined") {
         // Solicitar el resto de campos del cliente
@@ -298,21 +316,16 @@ function registrarCliente() {
         } while (clienteApellido[1] == false);
         nuevoCliente = new cliente(clienteDNI[0], clienteNombre[0], clienteApellido[0]);
         clientes.push(nuevoCliente);
-        mensaje = "";
-        contenedorClientes.innerHTML = "";
-        clientes.forEach(item => {
-            mensaje = mensaje + `<li> ${item.nombre} ${item.apellido}(${item.dni})</li> `;
-            contenedorClientes.innerHTML = mensaje;
-        })
+
     } else {
         //utiilizar datos del cliente precargado
-        clienteNombre = found.nombre;
-        clienteApellido = found.apellido;
+        clienteNombreX = found.nombre;
+        clienteApellidoX = found.apellido;
         alert(`¡Excelente! Ya te tenemos registrado...`);
     }
 
 
-    // found = clientes.find(e => e.dni === clienteDNI);
+
 
 
 
@@ -456,11 +469,12 @@ function incrementoLuces(horario) {
     let valorIncrementado = 0;
     let respuestaBoleanLuces = true;
     if (horario == "6PM" || horario == "7PM" || horario == "8PM" || horario == "9PM" || horario == "10PM") {
-        valorIncrementado = 0.1;
+        valorIncrementado = incrementos.luces;
+        respuestaBoleanLuces = true;
     } else if (horario == "6AM" || horario == "7AM" || horario == "8AM" || horario == "9AM" || horario == "10AM" || horario == "11AM" || horario == "12AM" || horario == "13AM" || horario == "14AM" || horario == "15AM" || horario == "16AM" || horario == "17AM") {
         valorIncrementado = 0;
+        respuestaBoleanLuces = true;
     } else {
-        alert("Por favor, indica el horario exáctamente como aparece en las opciones que te mostramos.");
         respuestaBoleanLuces = false;
 
     }
@@ -500,35 +514,17 @@ function incrementoDia(diaReserva) {
     } else if (diaReserva == "LUNES" || diaReserva == "MARTES" || diaReserva == "MIERCOLES" || diaReserva == "JUEVES") {
         respuestaBolean = true;
     } else {
-        // alert("Por favor, indica el día correcto.");
+
         respuestaBolean = false;
 
     }
     return [parseFloat(incremento), respuestaBolean];
 }
 
-// Listar reservas realizadas
-
-//
 
 
 
 
-
-
-// Prompts y alerts
-// alert("Bienvenidos a la reserva de canchas deportivas");
-// let nombre = hacerPregunta("¿Cuál es tu nombre?");
-// let deporte = hacerPregunta(`${ saludo } ${ nombre }, \n\n¿Qué deporte desea jugar ?\n[FUTBOL][VOLEY][TENIS][BASKET][PADEL]`);
-// obtenerPrecio(deporte);
-// let diaReserva = hacerPregunta("¿Qué día desea reservar?\n[LUNES] [MARTES] [MIERCOLES] [JUEVES] [VIERNES] [SABADO] [DOMINGO]");
-// incrementoDia(diaReserva);
-// let horaReserva = hacerPregunta("¿A qué hora desea reservar?\n[6AM] [7AM] [8AM] [9AM] [10AM] [11AM] [12PM] [1PM] [2PM] [3PM] [4PM] [5PM] [6PM] [7PM] [8PM] [9PM] [10PM]");
-// incrementoLuces(horaReserva);
-
-
-// Mostrar detalle de la reserva
-alert("RESERVA REALIZADA \n\nNombre: " + nombre + "\n" + "Deporte: " + deporte + "\n" + "Día de reserva: " + diaReserva + "\n" + "Hora de reserva: " + horaReserva + "\n" + "Precio de reserva: S/." + (obtenerPrecio(deporte) * (1 + incrementoLuces(horaReserva) + incrementoDia(diaReserva))).toFixed(2));
 
 
 
