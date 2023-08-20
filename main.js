@@ -243,7 +243,7 @@ function realizarReserva() {
 
     //Pintar reservas en sección derecha
 
-    alert(`FDS: ${incrementos.fds} / ${datoIncremento[0]} y Luces ${incrementos.luces} / ${respuestaLuces[0]}`);
+
     contenedorCardsReservas.innerHTML = "";
     let mensajeReservaFinal = "";
     reservas.forEach(item => {
